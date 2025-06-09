@@ -1,0 +1,130 @@
+package com.mycompany.mathchallenge;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
+
+public class MathChallenge {
+    private final int SIZE = 4; // size niya example 4x4 grid
+    private char[][] board = new char[SIZE][SIZE];
+    private ArrayList<Integer> sequence = new ArrayList<>();
+    private int currentStep = 0;
+    private int score = 0;
+
+    public MathChallenge() {
+        // Initialize empty board
+        for (char[] row : board) {
+            Arrays.fill(row, '.');
+            
+        }
+    }
+
+    public void startGame() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Welcome to Memory Game");
+        System.out.println("Remember the sequence of numbers.");
+
+           while (score < 50) {  // game will stop at level 50
+        addToSequence();
+        showSequence();
+            {
+                }
+            boolean correct = getUserInput(scanner);
+            
+            
+            if (!correct) {
+                System.out.println("Game Over!");
+                System.out.println("Your score: " +  score);
+                break;
+                
+            }
+            
+            score++;
+            System.out.println("Correct!");
+             System.out.println("Current score: " +  score);
+             
+             
+                 if (score == 50) {
+        System.out.println("\nCONGRATULATIONS! ");
+        System.out.println("You have completed all 50 levels!");
+        System.out.println("Your memory is sharp as ever!"); }
+           
+        }
+        
+        scanner.close();
+    }
+
+    private void addToSequence() {
+        Random rand = new Random();
+        sequence.add(rand.nextInt(1 * 15)); // 1-16
+    }
+
+    private void showSequence() {
+        System.out.println("\nWatch the sequence:");
+        
+        // display ang X
+        for (int num : sequence) {
+            printBoard();
+            
+            int row = (num - 1) / SIZE;
+            int col = (num - 1) % SIZE;
+            board[row][col] = 'X';
+           printBoard();
+            clearBoard();
+              
+            try {
+                Thread.sleep(1000); // Pause for 1 second
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+         
+            try {
+                Thread.sleep(500); // Pause for 0.5 second between numbers
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private boolean getUserInput(Scanner scanner) {
+        System.out.println("\nYour turn! Enter the numbers in order:");
+        currentStep = 0;
+        
+        while (currentStep < sequence.size()) {
+            System.out.print("\nEnter your answer here: ");
+            int input = scanner.nextInt();
+            
+            if (input != sequence.get(currentStep)) {
+                return false;
+            }
+            
+            currentStep++;
+        }
+        
+        return true;
+    }
+
+    private void clearBoard() {
+        for (char[] row : board) {
+            Arrays.fill(row, '.');
+        }
+    }
+
+    private void printBoard() {
+        System.out.println();
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                int num = i * SIZE + j + 1;
+                System.out.printf("%2d:%c ", num, board[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        MathChallenge game = new MathChallenge();
+        game.startGame();
+    }
+}
